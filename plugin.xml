@@ -17,9 +17,15 @@
       <plugin name="MoodstocksScanner" value="CDVMoodstocksScanner"/>
     </config-file>
 
-    <resource-file src="libmoodstocks-sdk.a" />
     <header-file src="moodstocks_sdk.h" />
 
+    <!-- copy moodstocks lib to source file (need to check license if ok to distribute!) -->
+    <source-file src="libmoodstocks-sdk.a" />
+
+    <!-- does not set the correct entry in framework (see README) -->
+    <!--framework src="libmoodstocks-sdk.a" /-->
+
+    <!-- -->
     <source-file src="Obj-C/MSApiSearch.h" target-dir="Obj-C" />
     <source-file src="Obj-C/MSApiSearch.m" target-dir="Obj-C" />
     <source-file src="Obj-C/MSAvailability.h" target-dir="Obj-C" />
