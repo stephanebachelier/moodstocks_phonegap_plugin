@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="com.phonegap.plugins.moodstocks"
+  version="0.0.0">
+
+  <name>Moodstocks</name>
+
+  <asset src="www/moodstocks.scanner.js" target="js/moodstocks.scanner.js" />
+
+  <!-- ios -->
+  <platform name="ios">
+    <plugins-plist key="MoodstocksScanner" string="CDVMoodstocksScanner" />
+
+    <!-- Cordova >= 2.3 -->
+    <config-file target="config.xml" parent="/cordova/plugins">
+      <plugin name="MoodstocksScanner" value="CDVMoodstocksScanner"/>
+    </config-file>
+
+    <resource-file src="libmoodstocks-sdk.a" />
+    <header-file src="moodstocks_sdk.h" />
+
+    <source-file src="Obj-C/MSApiSearch.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSApiSearch.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSAvailability.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSAvailability.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSCaptureSession.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSCaptureSession.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSDebug.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSImage.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSImage.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSObjC.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSResult.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSResult.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSScanner.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSScanner.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSScannerSession.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSScannerSession.m" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSSync.h" target-dir="Obj-C" />
+    <source-file src="Obj-C/MSSync.m" target-dir="Obj-C" />
+
+    <framework src="libiconv.dylib" />
+    <framework src="AVFoundation.framework" />
+    <framework src="Accelerate.framework" />
+    <framework src="CoreVideo.framework" />
+    <framework src="ImageIO.framework" />
+
+  </platform>
+
+</plugin>
