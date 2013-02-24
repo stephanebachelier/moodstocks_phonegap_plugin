@@ -6,7 +6,7 @@
 
   <name>Moodstocks</name>
 
-  <asset src="www/moodstocks.scanner.js" target="js/moodstocks.scanner.js" />
+  <asset src="www/moodstocks.scanner.js" target="js" />
 
   <!-- ios -->
   <platform name="ios">
