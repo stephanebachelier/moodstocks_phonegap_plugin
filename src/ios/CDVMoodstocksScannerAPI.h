@@ -4,4 +4,4 @@
 #define MS_API_KEY @"YOUR_API_KEY"
 #define MS_API_SEC @"YOUR_API_SECRET"
 
-#endif __API_DEFINITION
+#endif
