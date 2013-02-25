@@ -16,7 +16,17 @@
     <config-file target="config.xml" parent="/cordova/plugins">
       <plugin name="MoodstocksScanner" value="CDVMoodstocksScanner"/>
     </config-file>
+    
+    <!--              -->
+    <!-- plugin files -->
+    <!--              -->
+    <source-file src="CDVMoodstocksScanner.m" />
+    <header-file src="CDVMoodstocksScanner.h" />
+    <header-file src="CDVMoodstocksScannerAPI.h" />
 
+    <!--                      -->
+    <!-- Moodstocks SDK files -->
+    <!--                      -->
     <header-file src="moodstocks_sdk.h" />
 
     <!-- copy moodstocks lib to source file (need to check license if ok to distribute!) -->
