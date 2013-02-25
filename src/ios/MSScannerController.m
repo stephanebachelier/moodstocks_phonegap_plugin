@@ -234,12 +234,20 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_overlayController scanner:self resultFound:result];
             });
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate scanner:self didScan:[result getValue]];
+            });
         }
     }
 }
 
 - (void)session:(MSScannerSession *)scanner failedToScan:(NSError *)error {
     MSDLog(@" [MOODSTOCKS SDK] SCAN ERROR: %@", MSErrMsg([error code]));
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate scanner:self failedToScan:error];
+    });
 }
 
 - (void)scannerWillSearch:(MSScanner *)scanner {
@@ -254,6 +262,10 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     if (result != nil) {
         [_scannerSession pause];
         [_overlayController scanner:self resultFound:result];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate scanner:self didScan:[result getValue]];
+        });
     }
     else {
         // Feel free to choose the proper UI component used to warn the user
@@ -263,6 +275,11 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
                                     delegate:nil
                            cancelButtonTitle:@"OK"
                            otherButtonTitles:nil] autorelease] show];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate scanner:self didScan:@"No match found"];
+        });
+        
     }
 }
 
@@ -299,6 +316,10 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
                                     delegate:nil
                            cancelButtonTitle:@"OK"
                            otherButtonTitles:nil] autorelease] show];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate scanner:self failedToScan:errStr];
+        });
     }
 }
 #endif
