@@ -26,7 +26,8 @@
 #import "MSScannerSession.h"
 #import "MSActivityView.h"
 
-@protocol MSScannerOverlayDelegate;
+@protocol MSScannerOverlayDelegate, CDVScannerDelegate;
+
 @class MSOverlayController;
 
 @interface MSScannerController : UIViewController
@@ -43,12 +44,22 @@ MSActivityViewDelegate
     UIView *_videoPreview;
 }
 
+@property (nonatomic, assign) id <CDVScannerDelegate> scannerDelegate;
+
+
 /**
  * Flush the last recognized result (if any) and start scanning again
  */
 - (void)resume;
 
 @end
+
+@protocol CDVScannerDelegate <NSObject>
+- (void)scanner:(MSScannerController *)scanner didScan:(MSResult *)result;
+@optional
+- (void)scanner:(MSScannerController *)scanner failedToScan:(NSError *)error;
+@end
+
 
 @protocol MSScannerOverlayDelegate <NSObject>
 /**

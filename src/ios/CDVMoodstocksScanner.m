@@ -4,9 +4,16 @@
 #import "moodstocks_sdk.h"
 #import "CDVMoodstocksScannerAPI.h"
 
-#import "MSScannerController.h"
 #import "MSDebug.h"
 
+/* Private stuff */
+@interface CDVMoodstocksScanner ()
+
+- (void)scannerInit;
+- (void)scannerSync;
+- (void)sendScanResult:(CDVPluginResult *)pluginResult;
+
+@end
 
 @implementation CDVMoodstocksScanner
 
@@ -46,7 +53,8 @@
     }
     
     MSScannerController *scannerController = [[MSScannerController alloc] init];
-    
+    [scannerController setScannerDelegate:self];
+
     [self.viewController presentModalViewController:scannerController animated:YES];
     [scannerController release];
 }
@@ -86,6 +94,24 @@
     if ([scanner isSyncing]) return;
     [scanner syncWithDelegate:self];
 #endif
+}
+
+#pragma mark - CDVScannerDelegate protocol
+
+- (void)scanner:(MSScannerController *)scanner didScan:(NSString *)result
+{
+    NSLog(@"scanner result : %@", result);
+    
+    [self sendScanResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                           messageAsString:result]];
+}
+
+- (void)scanner:(MSScannerController *)scanner failedToScan:(NSString *)error
+{
+    NSLog(@"scanner failure : %@", error);
+    
+    [self sendScanResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:error]];
 }
 
 #pragma mark - MSScannerDelegate protocol

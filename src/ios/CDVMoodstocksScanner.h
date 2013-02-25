@@ -9,8 +9,9 @@
 #import <Cordova/CDV.h>
 
 #import "MSScanner.h"
+#import "MSScannerController.h"
 
-@interface CDVMoodstocksScanner: CDVPlugin <MSScannerDelegate>
+@interface CDVMoodstocksScanner: CDVPlugin <MSScannerDelegate, CDVScannerDelegate>
 
 // YES if the device is compatible, NO otherwise
 @property (assign, readonly) BOOL isScannerAvailable;
