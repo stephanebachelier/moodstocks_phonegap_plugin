@@ -51,6 +51,7 @@ MSActivityViewDelegate
  * Flush the last recognized result (if any) and start scanning again
  */
 - (void)resume;
+- (void)pause;
 
 @end
 

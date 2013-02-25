@@ -236,7 +236,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
             });
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.delegate scanner:self didScan:[result getValue]];
+                [self.scannerDelegate scanner:self didScan:[result getValue]];
             });
         }
     }
@@ -246,7 +246,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     MSDLog(@" [MOODSTOCKS SDK] SCAN ERROR: %@", MSErrMsg([error code]));
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.delegate scanner:self failedToScan:error];
+        [self.scannerDelegate scanner:self failedToScan:error];
     });
 }
 
@@ -264,7 +264,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
         [_overlayController scanner:self resultFound:result];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate scanner:self didScan:[result getValue]];
+            [self.scannerDelegate scanner:self didScan:[result getValue]];
         });
     }
     else {
@@ -277,7 +277,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
                            otherButtonTitles:nil] autorelease] show];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate scanner:self didScan:@"No match found"];
+            [self.scannerDelegate scanner:self didScan:@"No match found"];
         });
         
     }
@@ -318,7 +318,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
                            otherButtonTitles:nil] autorelease] show];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate scanner:self failedToScan:errStr];
+            [self.scannerDelegate scanner:self failedToScan:errStr];
         });
     }
 }
@@ -336,6 +336,10 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     [_result release];
     _result = nil;
     [_scannerSession resume];
+}
+
+- (void)pause {
+    [self dismissAction];
 }
 
 @end

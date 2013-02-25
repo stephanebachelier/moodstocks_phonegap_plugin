@@ -25,6 +25,9 @@
 // save invoked command
 @property (nonatomic, retain) CDVInvokedUrlCommand *command;
 
+// save invoked command
+@property (nonatomic, retain) MSScannerController *scannerController;
+
 /**
  * _ API _
  */

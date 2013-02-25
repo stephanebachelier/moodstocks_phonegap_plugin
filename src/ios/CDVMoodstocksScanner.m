@@ -12,6 +12,7 @@
 - (void)scannerInit;
 - (void)scannerSync;
 - (void)sendScanResult:(CDVPluginResult *)pluginResult;
+- (void)closeScanner;
 
 @end
 
@@ -21,6 +22,7 @@
 @synthesize scannerOpenError;
 @synthesize scannerSyncError;
 @synthesize command;
+@synthesize scannerController;
 
 - (void)pluginInitialize
 {
@@ -43,19 +45,26 @@
         return;
     }
     
-    MSScannerController *scannerController = [[MSScannerController alloc] init];
+    self.scannerController = [[MSScannerController alloc] init];
     [scannerController setScannerDelegate:self];
 
     [self.viewController presentModalViewController:scannerController animated:YES];
-    [scannerController release];
 }
 
 - (void)sendScanResult:(CDVPluginResult *)pluginResult
 {
     NSLog(@"send scan result %@", [pluginResult toJSONString]);
     
+    [self closeScanner];
     [self.commandDelegate sendPluginResult:pluginResult
                                 callbackId:command.callbackId];
+}
+
+- (void)closeScanner
+{
+    [scannerController pause];
+    [self.viewController dismissModalViewControllerAnimated:YES];
+    [scannerController release];
 }
 
 #pragma mark - Moodstocks SDK
