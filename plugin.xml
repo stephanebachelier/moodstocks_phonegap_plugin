@@ -23,7 +23,16 @@
     <source-file src="CDVMoodstocksScanner.m" />
     <header-file src="CDVMoodstocksScanner.h" />
     <header-file src="CDVMoodstocksScannerAPI.h" />
-
+    
+    <source-file src="MSActivityView.m" />
+    <header-file src="MSActivityView.h" />
+    
+    <source-file src="MSOverlayController.m" />
+    <header-file src="MSOverlayController.h" />
+    
+    <source-file src="MSScannerController.m" />
+    <header-file src="MSScannerController.h" />
+    
     <!--                      -->
     <!-- Moodstocks SDK files -->
     <!--                      -->

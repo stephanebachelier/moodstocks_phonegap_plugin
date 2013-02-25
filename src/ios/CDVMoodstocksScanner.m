@@ -1,8 +1,12 @@
 
 #import "CDVMoodstocksScanner.h"
-#import "CDVMoodstocksScannerAPI.h"
+
 #import "moodstocks_sdk.h"
+#import "CDVMoodstocksScannerAPI.h"
+
+#import "MSScannerController.h"
 #import "MSDebug.h"
+
 
 @implementation CDVMoodstocksScanner
 
@@ -38,7 +42,13 @@
         [self sendScanResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION
                                                    messageAsString:@"scanner not available"]
              ];
+        return;
     }
+    
+    MSScannerController *scannerController = [[MSScannerController alloc] init];
+    
+    [self.viewController presentModalViewController:scannerController animated:YES];
+    [scannerController release];
 }
 
 - (void)sendScanResult:(CDVPluginResult *)pluginResult
@@ -91,7 +101,7 @@
     ms_errcode ecode = [error code];
     if (ecode == MS_BUSY) return;
     scannerSyncError = ecode;
-    NSLog(@" [MOODSTOCKS SDK] SYNC ERROR: %@", MSErrMsg(ecode));
+    MSDLog(@" [MOODSTOCKS SDK] SYNC ERROR: %@", MSErrMsg(ecode));
 }
 
 // Dispatched when an online search (aka API search) is completed
@@ -104,7 +114,7 @@
     ms_errcode ecode = [error code];
     if (ecode == MS_BUSY) return;
     scannerSyncError = ecode;
-    NSLog(@" [MOODSTOCKS SDK] SEARCH ERROR: %@", MSErrMsg(ecode));
+    MSDLog(@" [MOODSTOCKS SDK] SEARCH ERROR: %@", MSErrMsg(ecode));
 }
 
 @end
