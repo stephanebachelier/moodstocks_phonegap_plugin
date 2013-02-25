@@ -82,7 +82,7 @@
         
         if (![scanner openWithKey:MS_API_KEY secret:MS_API_SEC error:&err]) {
             scannerOpenError = [err code];
-            NSLog(@"scanner open error %@", [err code]);
+            MSDLog(@"scanner open error %@", [err code]);
         }
 #endif
     }
