@@ -29,11 +29,6 @@
  * _ API _
  */
 
-// overwrite to setup moodstocks scanner
-// NOTE: setup should be done at startup. 
-//       New Cordova API will make this possible soon (see github repo)
-- (CDVPlugin*)initWithWebView:(UIWebView*)theWebView;
-
 - (void)scan:(CDVInvokedUrlCommand *)aCommand;
 
 @end

@@ -12,7 +12,7 @@
   <platform name="ios">
     <plugins-plist key="MoodstocksScanner" string="CDVMoodstocksScanner" />
 
-    <!-- Cordova >= 2.3 -->
+    <!-- Cordova >= 2.5 -->
     <config-file target="config.xml" parent="/cordova/plugins">
       <plugin name="MoodstocksScanner" value="CDVMoodstocksScanner"/>
     </config-file>

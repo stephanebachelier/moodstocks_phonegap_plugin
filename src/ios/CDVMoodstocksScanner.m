@@ -22,19 +22,11 @@
 @synthesize scannerSyncError;
 @synthesize command;
 
-- (CDVPlugin*)initWithWebView:(UIWebView*)theWebView
+- (void)pluginInitialize
 {
-    self = [super init];
-    
-    if (self)
-    {
-        // Moodstocks SDK setup
-        [self scannerInit];
-    }
-    
-    return self;
+    // Moodstocks SDK setup
+    [self scannerInit];
 }
-
 
 - (void)scan:(CDVInvokedUrlCommand *)aCommand
 {
