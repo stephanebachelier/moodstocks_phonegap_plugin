@@ -246,7 +246,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     MSDLog(@" [MOODSTOCKS SDK] SCAN ERROR: %@", MSErrMsg([error code]));
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.scannerDelegate scanner:self failedToScan:error];
+        [self.scannerDelegate scanner:self failedToScan:MSErrMsg([error code])];
     });
 }
 

@@ -56,9 +56,9 @@ MSActivityViewDelegate
 @end
 
 @protocol CDVScannerDelegate <NSObject>
-- (void)scanner:(MSScannerController *)scanner didScan:(MSResult *)result;
+- (void)scanner:(MSScannerController *)scanner didScan:(NSString *)result;
 @optional
-- (void)scanner:(MSScannerController *)scanner failedToScan:(NSError *)error;
+- (void)scanner:(MSScannerController *)scanner failedToScan:(NSString *)error;
 @end
 
 
