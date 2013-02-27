@@ -194,6 +194,16 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     _videoPreview = nil;
 }
 
+// IOS 6
+- (BOOL)shouldAutorotate {
+    return self.presentingViewController.shouldAutorotate;
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return self.presentingViewController.supportedInterfaceOrientations;
+}
+
+// IOS < 6 - FIXME : need to use defined orientation
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
