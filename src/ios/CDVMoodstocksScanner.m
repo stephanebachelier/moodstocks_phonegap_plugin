@@ -48,7 +48,7 @@
     self.scannerController = [[MSScannerController alloc] init];
     [scannerController setScannerDelegate:self];
 
-    [self.viewController presentModalViewController:scannerController animated:YES];
+    [self.viewController presentViewController:scannerController animated:YES completion:^{}];
 }
 
 - (void)sendScanResult:(CDVPluginResult *)pluginResult
