@@ -49,6 +49,8 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 - (void)snapAction:(UIGestureRecognizer *)gestureRecognizer;
 - (void)dismissAction;
 
+- (void)deviceOrientationDidChange;
+
 @end
 
 
@@ -69,11 +71,23 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 #endif
 
         _overlayController = [[MSOverlayController alloc] init];
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(deviceOrientationDidChange)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
     }
     return self;
 }
 
 - (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceOrientationDidChangeNotification
+                                                  object:nil];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    
     [_overlayController release];
     _overlayController = nil;
 
@@ -81,7 +95,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 
     [_result release];
     _result = nil;
-
+        
     [super dealloc];
 }
 
@@ -130,6 +144,12 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     }
 }
 
+- (void)deviceOrientationDidChange
+{
+    captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
+}
+
 #pragma mark - View lifecycle
 
 - (void)loadView {
@@ -165,11 +185,11 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     [videoPreviewLayer setMasksToBounds:YES];
 
     // force preview layer orientation to device orientation
-    AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
-    [captureLayer setFrame:[_videoPreview bounds]];
-    [[captureLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
+    captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    [captureVideoPreviewLayer setFrame:[_videoPreview bounds]];
+    [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
 
-    [videoPreviewLayer insertSublayer:captureLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
+    [videoPreviewLayer insertSublayer:captureVideoPreviewLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
 
     // Try again to synchronize if the last sync failed
     id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];

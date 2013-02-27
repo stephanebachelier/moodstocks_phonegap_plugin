@@ -42,6 +42,8 @@ MSActivityViewDelegate
     MSScannerSession *_scannerSession;
     MSResult *_result; // previous result
     UIView *_videoPreview;
+    
+    AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 }
 
 @property (nonatomic, assign) id <CDVScannerDelegate> scannerDelegate;
