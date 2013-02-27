@@ -148,6 +148,28 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 {
     captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
     [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
+    
+    // update capture layer frame - must be a better way!!!
+    CGFloat w = self.view.frame.size.width;
+    CGFloat h = self.view.frame.size.height;
+    
+    CGRect frame;
+    
+    switch (orientation)
+    {
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+            frame = CGRectMake(0, 0, h, w);
+            break;
+            
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationPortraitUpsideDown:
+            frame = CGRectMake(0, 0, w, h);
+            break;
+    }
+
+    [captureVideoPreviewLayer setFrame:frame];
+
 }
 
 #pragma mark - View lifecycle
