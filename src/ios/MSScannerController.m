@@ -164,8 +164,10 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
     CALayer *videoPreviewLayer = [_videoPreview layer];
     [videoPreviewLayer setMasksToBounds:YES];
 
-    CALayer *captureLayer = [_scannerSession previewLayer];
+    // force preview layer orientation to device orientation
+    AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
     [captureLayer setFrame:[_videoPreview bounds]];
+    [[captureLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
 
     [videoPreviewLayer insertSublayer:captureLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
 
