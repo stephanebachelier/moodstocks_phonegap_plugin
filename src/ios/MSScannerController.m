@@ -50,6 +50,7 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 - (void)dismissAction;
 
 - (void)deviceOrientationDidChange;
+- (void)updateVideoOrientation;
 
 @end
 
@@ -146,8 +147,18 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 
 - (void)deviceOrientationDidChange
 {
-    captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
-    [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
+    [self updateVideoOrientation];
+}
+
+- (void)updateVideoOrientation
+{
+    if (!captureVideoPreviewLayer)
+    {
+        return;
+    }
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    [[captureVideoPreviewLayer connection] setVideoOrientation:orientation];
     
     // update capture layer frame - must be a better way!!!
     CGFloat w = self.view.frame.size.width;
@@ -211,9 +222,10 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
 
     // force preview layer orientation to device orientation
     captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
-    [captureVideoPreviewLayer setFrame:[_videoPreview bounds]];
-    [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
-
+    
+    // fix capture video preview orientation
+    [self updateVideoOrientation];
+        
     [videoPreviewLayer insertSublayer:captureVideoPreviewLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
 
     // Try again to synchronize if the last sync failed
