@@ -164,6 +164,9 @@ static NSInteger kMSScanOptions = MS_RESULT_TYPE_IMAGE;
             
         case UIDeviceOrientationPortrait:
         case UIDeviceOrientationPortraitUpsideDown:
+        case UIDeviceOrientationFaceDown:
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationUnknown:
             frame = CGRectMake(0, 0, w, h);
             break;
     }
