@@ -21,45 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <Cordova/CDV.h>
 
-#import "MoodstocksPlugin.h"
-#import "MSHandler.h"
-#import "MSActivityView.h"
+@interface MoodstocksPlugin : CDVPlugin
 
-#import "MSScannerSession.h"
-#import "MSResult.h"
+- (void)open:(CDVInvokedUrlCommand *)command;
+- (void)sync:(CDVInvokedUrlCommand *)command;
+- (void)scan:(CDVInvokedUrlCommand *)command;
 
-@class MSOverlayView;
-@protocol MSScannerOverlayDelegate;
+- (void)returnScanResult:(NSString *)value
+                  format:(int)format
+                callback:(NSString *)callback;
 
-@interface MSScannerController : UIViewController 
-<UIGestureRecognizerDelegate,
-#if MS_SDK_REQUIREMENTS
-MSScannerSessionDelegate,
-#endif
-MSActivityViewDelegate
-> {
-    MSOverlayView *_overlayView;
-    MSScannerSession *_scannerSession;
-    UIView *_videoPreview;
-    UIToolbar *_toolbar;
-    UIBarButtonItem *_barButton;
-    UITapGestureRecognizer *_tapRecognizer;
-    NSInteger _scanOptions;
-}
-
-- (id)initWithHandler:(MSHandler *)handler scanOptions:(NSInteger)scanOptions;
-
-@property (nonatomic, retain) MSHandler *handler;
-
-@end
-
-@protocol MSScannerOverlayDelegate <NSObject>
-
-/**
- * Used to communicate any information (e.g. options, etc) that may be shown on the overlay side
- */
-- (void)scanner:(MSScannerController *)scanner stateUpdated:(NSDictionary *)state;
+- (void)returnSyncStatus:(NSString *)message
+                  status:(int)status
+                progress:(int)progress
+                callback:(NSString *)callback
+      shouldKeepCallback:(BOOL)shouldKeepCallback;
 
 @end

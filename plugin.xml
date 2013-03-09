@@ -1,74 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  id="com.phonegap.plugins.moodstocks"
-  version="0.0.0">
+  id="com.phonegap.plugins.sb.moodstocks"
+  version="1.0.0">
 
   <name>Moodstocks</name>
 
-  <asset src="www/moodstocks.scanner.js" target="js" />
+  <asset src="www/MoodstocksPlugin.js" target="js" />
 
   <!-- ios -->
   <platform name="ios">
-    <plugins-plist key="MoodstocksScanner" string="CDVMoodstocksScanner" />
+    <plugins-plist key="MoodstocksPlugin" string="MoodstocksPlugin" />
 
     <!-- Cordova >= 2.5 -->
     <config-file target="config.xml" parent="/cordova/plugins">
-      <plugin name="MoodstocksScanner" value="CDVMoodstocksScanner"/>
+      <plugin name="MoodstocksPlugin" value="MoodstocksPlugin"/>
     </config-file>
     
     <!--              -->
     <!-- plugin files -->
     <!--              -->
-    <source-file src="CDVMoodstocksScanner.m" />
-    <header-file src="CDVMoodstocksScanner.h" />
-    <header-file src="CDVMoodstocksScannerAPI.h" />
+    <source-file src="MoodstocksPlugin.m" />
+    <header-file src="MoodstocksPlugin.h" />
     
     <source-file src="MSActivityView.m" />
     <header-file src="MSActivityView.h" />
     
-    <source-file src="MSOverlayController.m" />
-    <header-file src="MSOverlayController.h" />
+    <source-file src="MSOverlayView.m" />
+    <header-file src="MSOverlayView.h" />
     
     <source-file src="MSScannerController.m" />
     <header-file src="MSScannerController.h" />
-    
-    <!--                      -->
-    <!-- Moodstocks SDK files -->
-    <!--                      -->
-    <header-file src="moodstocks_sdk.h" />
 
-    <!-- copy moodstocks lib to source file (need to check license if ok to distribute!) -->
-    <source-file src="libmoodstocks-sdk.a" />
 
-    <!-- does not set the correct entry in framework (see README) -->
-    <!--framework src="libmoodstocks-sdk.a" /-->
-
-    <!-- -->
-    <source-file src="Obj-C/MSApiSearch.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSApiSearch.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSAvailability.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSAvailability.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSCaptureSession.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSCaptureSession.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSDebug.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSImage.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSImage.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSObjC.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSResult.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSResult.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSScanner.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSScanner.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSScannerSession.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSScannerSession.m" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSSync.h" target-dir="Obj-C" />
-    <source-file src="Obj-C/MSSync.m" target-dir="Obj-C" />
-
-    <framework src="libiconv.dylib" />
     <framework src="AVFoundation.framework" />
-    <framework src="Accelerate.framework" />
+    <framework src="CoreMedia.framework" />
     <framework src="CoreVideo.framework" />
-    <framework src="ImageIO.framework" />
+    <framework src="QuartzCore.framework" />
 
   </platform>
 

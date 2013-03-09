@@ -36,17 +36,17 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-
+        
         _label = [[UILabel alloc] init];
         _label.backgroundColor = [UIColor clearColor];
         _label.lineBreakMode = UILineBreakModeTailTruncation;
         _label.font = [UIFont boldSystemFontOfSize:16];
         _label.textColor = [UIColor whiteColor];
         [self addSubview:_label];
-
+        
         _gear = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self addSubview:_gear];
-
+        
         _cancelButton = [[UIButton alloc] init];
         [_cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
         [_cancelButton setShowsTouchWhenHighlighted:YES];
@@ -59,9 +59,9 @@
     [_label release];
     [_gear release];
     [_cancelButton release];
-
+    
     _delegate = nil;
-
+    
     [super dealloc];
 }
 
@@ -70,20 +70,20 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     CGFloat w = self.frame.size.width;
     CGFloat h = self.frame.size.height;
-
+    
     CGFloat gw = _gear.frame.size.width;
     CGFloat gh = _gear.frame.size.height;
     _gear.frame = CGRectMake(0.5 * (w - gw), 0.5 * (h - gh), gw, gh);
-
+    
     CGSize textSize = [_label.text sizeWithFont:_label.font];
     const CGFloat spacing = 10;
     CGFloat xl = 0.5 * (w - textSize.width);
     CGFloat yl = _gear.frame.origin.y + gh;
     _label.frame = CGRectMake(xl, yl + spacing, textSize.width, textSize.height);
-
+    
     CGFloat margin = 5;
     UIImage *cancelImage = [UIImage imageNamed:@"cancel.png"];
     [_cancelButton setBackgroundImage:cancelImage forState:UIControlStateNormal];
@@ -121,7 +121,8 @@
 
 - (void)cancel {
     if ([_delegate respondsToSelector:@selector(activityViewDidCancel:)])
-         [_delegate performSelector:@selector(activityViewDidCancel:) withObject:self];
+        [_delegate performSelector:@selector(activityViewDidCancel:) withObject:self];
 }
 
 @end
+
