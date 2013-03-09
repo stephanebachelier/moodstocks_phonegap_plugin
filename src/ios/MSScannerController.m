@@ -35,6 +35,10 @@
 - (void)setActivityView:(BOOL)show;
 - (void)snapAction:(UIGestureRecognizer *)gestureRecognizer;
 - (void)dismissAction;
+
+- (void)deviceOrientationDidChange;
+- (void)updateVideoOrientation;
+
 @end
 
 @implementation MSScannerController
@@ -101,8 +105,16 @@
     CALayer *videoPreviewLayer = [_videoPreview layer];
     [videoPreviewLayer setMasksToBounds:YES];
     
+    /*
     CALayer *captureLayer = [_scannerSession previewLayer];
     [captureLayer setFrame:[_videoPreview bounds]];
+    */
+    
+    // force preview layer orientation to device orientation
+    AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    
+    // fix capture video preview orientation
+    [self updateVideoOrientation];
     
     [videoPreviewLayer insertSublayer:captureLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
     
@@ -156,17 +168,61 @@
 #pragma mark -
 #pragma mark Autorotation setting
 
-// Here we block the scanner in portrait orientation
+- (void)deviceOrientationDidChange
+{
+    [self updateVideoOrientation];
+}
+
+- (void)updateVideoOrientation
+{
+    AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    if (!captureLayer)
+    {
+        return;
+    }
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    [[captureLayer connection] setVideoOrientation:orientation];
+    
+    // update capture layer frame - must be a better way!!!
+    CGFloat w = self.view.frame.size.width;
+    CGFloat h = self.view.frame.size.height;
+    
+    CGRect frame;
+    
+    switch (orientation)
+    {
+        case UIDeviceOrientationLandscapeLeft:
+        case UIDeviceOrientationLandscapeRight:
+            frame = CGRectMake(0, 0, h, w);
+            break;
+            
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationPortraitUpsideDown:
+        case UIDeviceOrientationFaceDown:
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationUnknown:
+            frame = CGRectMake(0, 0, w, h);
+            break;
+    }
+    
+    [captureLayer setFrame:frame];
+    
+}
+
+// IOS 6
 - (BOOL)shouldAutorotate {
-    return NO;
+    return self.presentingViewController.shouldAutorotate;
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return self.presentingViewController.supportedInterfaceOrientations;
 }
 
+// IOS < 6 - FIXME : need to use defined orientation
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;
+    // Return YES for supported orientations
+	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Private stuff
