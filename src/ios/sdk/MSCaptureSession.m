@@ -59,7 +59,7 @@ static void ms_capturesession_cleanup(void *s) {
 #if MS_IPHONE_OS_REQUIREMENTS
         [self setup];
 
-        self.orientation = AVCaptureVideoOrientationPortrait;
+        self.orientation = [[UIDevice currentDevice] orientation];
         self.delegate = nil;
 
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
