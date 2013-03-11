@@ -36,9 +36,6 @@
 - (void)snapAction:(UIGestureRecognizer *)gestureRecognizer;
 - (void)dismissAction;
 
-- (void)deviceOrientationDidChange;
-- (void)updateVideoOrientation;
-
 @end
 
 @implementation MSScannerController
@@ -104,17 +101,15 @@
     
     CALayer *videoPreviewLayer = [_videoPreview layer];
     [videoPreviewLayer setMasksToBounds:YES];
-    
-    /*
-    CALayer *captureLayer = [_scannerSession previewLayer];
-    [captureLayer setFrame:[_videoPreview bounds]];
-    */
-    
+
     // force preview layer orientation to device orientation
     AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    [captureLayer layoutSublayers];
+    captureLayer.frame = _videoPreview.bounds;
     
-    // fix capture video preview orientation
-    [self updateVideoOrientation];
+    // update video orientation
+    NSLog(@"orientation ? %d", [[UIDevice currentDevice] orientation]);
+    [[captureLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
     
     [videoPreviewLayer insertSublayer:captureLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
     
@@ -168,48 +163,6 @@
 #pragma mark -
 #pragma mark Autorotation setting
 
-- (void)deviceOrientationDidChange
-{
-    [self updateVideoOrientation];
-}
-
-- (void)updateVideoOrientation
-{
-    AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
-    if (!captureLayer)
-    {
-        return;
-    }
-    
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    [[captureLayer connection] setVideoOrientation:orientation];
-    
-    // update capture layer frame - must be a better way!!!
-    CGFloat w = self.view.frame.size.width;
-    CGFloat h = self.view.frame.size.height;
-    
-    CGRect frame;
-    
-    switch (orientation)
-    {
-        case UIDeviceOrientationLandscapeLeft:
-        case UIDeviceOrientationLandscapeRight:
-            frame = CGRectMake(0, 0, h, w);
-            break;
-            
-        case UIDeviceOrientationPortrait:
-        case UIDeviceOrientationPortraitUpsideDown:
-        case UIDeviceOrientationFaceDown:
-        case UIDeviceOrientationFaceUp:
-        case UIDeviceOrientationUnknown:
-            frame = CGRectMake(0, 0, w, h);
-            break;
-    }
-    
-    [captureLayer setFrame:frame];
-    
-}
-
 // IOS 6
 - (BOOL)shouldAutorotate {
     return self.presentingViewController.shouldAutorotate;
@@ -223,6 +176,21 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
+{
+    [CATransaction begin];
+    
+    AVCaptureVideoPreviewLayer *captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    [captureVideoPreviewLayer layoutSublayers];
+    captureVideoPreviewLayer.frame = self.view.bounds;
+    [CATransaction commit];
+    
+    // update video orientation
+    [[captureVideoPreviewLayer connection] setVideoOrientation:orientation];
+    
+    [super willAnimateRotationToInterfaceOrientation:orientation duration:duration];
 }
 
 #pragma mark - Private stuff
