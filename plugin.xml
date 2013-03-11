@@ -6,7 +6,7 @@
 
   <name>Moodstocks</name>
 
-  <asset src="www/MoodstocksPlugin.js" target="js" />
+  <asset src="www/MoodstocksPlugin.js" target="www/js" />
 
   <!-- ios -->
   <platform name="ios">
@@ -32,11 +32,37 @@
     <source-file src="MSScannerController.m" />
     <header-file src="MSScannerController.h" />
 
+    <!-- Moodstocks SDK -->
+    <source-file src="sdk/moodstocks_sdk.h" />
+    <header-file src="sdk/MSApiSearch.h" />
+    <header-file src="sdk/MSApiSearch.h" />
+    <header-file src="sdk/MSAvailability.h" />
+    <header-file src="sdk/MSCaptureSession.h" />
+    <header-file src="sdk/MSDebug.h" />
+    <header-file src="sdk/MSImage.h" />
+    <header-file src="sdk/MSObjC.h" />
+    <header-file src="sdk/MSResult.h" />
+    <header-file src="sdk/MSScanner.h" />
+    <header-file src="sdk/MSScannerSession.h" />
+    <header-file src="sdk/MSSync.h" />
+    <source-file src="sdk/MSApiSearch.m" />
+    <source-file src="sdk/MSAvailability.m" />
+    <source-file src="sdk/MSCaptureSession.m" />
+    <source-file src="sdk/MSImage.m" />
+    <source-file src="sdk/MSResult.m" />
+    <source-file src="sdk/MSScanner.m" />
+    <source-file src="sdk/MSScannerSession.m" />
+    <source-file src="sdk/MSSync.m" />
+
 
     <framework src="AVFoundation.framework" />
     <framework src="CoreMedia.framework" />
     <framework src="CoreVideo.framework" />
     <framework src="QuartzCore.framework" />
+    
+    <!-- -->
+    <source-file src="sdk/libmoodstocks-sdk.a" />
+    <framework src="./sdk/libmoodstocks-sdk.a" />
 
   </platform>
 
