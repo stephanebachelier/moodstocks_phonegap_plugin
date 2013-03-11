@@ -36,6 +36,8 @@
 - (void)snapAction:(UIGestureRecognizer *)gestureRecognizer;
 - (void)dismissAction;
 
+- (void)handleVideoRotation;
+
 @end
 
 @implementation MSScannerController
@@ -69,10 +71,9 @@
 - (void)loadView {
     [super loadView];
     
-    CGFloat w = self.view.frame.size.width;
-    CGFloat h = self.view.frame.size.height;
     
-    CGRect videoFrame = CGRectMake(0, 0, w, h);
+    CGRect videoFrame = [[UIScreen mainScreen] bounds];
+    NSLog(@"mainScreen bounds %f %f --- %f %f", videoFrame.origin.x, videoFrame.origin.y, videoFrame.size.width, videoFrame.size.height);
     _videoPreview = [[[UIView alloc] initWithFrame:videoFrame] autorelease];
     _videoPreview.backgroundColor = [UIColor blackColor];
     _videoPreview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -88,7 +89,7 @@
     // Set the tapGesture's delegate to scanner controller
     _tapRecognizer.delegate = self;
     
-    CGRect overlayFrame = CGRectMake(0, 44, w, h);
+    CGRect overlayFrame = CGRectMake(0, 44, videoFrame.size.width, videoFrame.size.height);
     _overlayView = [[[MSOverlayView alloc] initWithFrame:overlayFrame] autorelease];
     [self.view addSubview:_overlayView];
 }
@@ -96,6 +97,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSLog(@"viewDidLoad");
+    NSLog(@"view bounds %f %f --- %f %f", self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
     self.navigationController.navigationBar.tintColor = nil;
     
@@ -105,10 +109,9 @@
     // force preview layer orientation to device orientation
     AVCaptureVideoPreviewLayer *captureLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
     [captureLayer layoutSublayers];
-    captureLayer.frame = _videoPreview.bounds;
+    captureLayer.frame = self.view.bounds;
     
     // update video orientation
-    NSLog(@"orientation ? %d", [[UIDevice currentDevice] orientation]);
     [[captureLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
     
     [videoPreviewLayer insertSublayer:captureLayer below:[[videoPreviewLayer sublayers] objectAtIndex:0]];
@@ -148,6 +151,11 @@
     [self.view addSubview:_toolbar];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [self handleVideoRotation];
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -181,16 +189,21 @@
 - (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
 {
     [CATransaction begin];
-    
-    AVCaptureVideoPreviewLayer *captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
-    [captureVideoPreviewLayer layoutSublayers];
-    captureVideoPreviewLayer.frame = self.view.bounds;
+    [self handleVideoRotation];
     [CATransaction commit];
     
-    // update video orientation
-    [[captureVideoPreviewLayer connection] setVideoOrientation:orientation];
-    
     [super willAnimateRotationToInterfaceOrientation:orientation duration:duration];
+}
+
+- (void)handleVideoRotation
+{
+    AVCaptureVideoPreviewLayer *captureVideoPreviewLayer = (AVCaptureVideoPreviewLayer *)[_scannerSession previewLayer];
+    
+    captureVideoPreviewLayer.frame = self.view.bounds;
+    [captureVideoPreviewLayer layoutSublayers];
+    
+    // update video orientation
+    [[captureVideoPreviewLayer connection] setVideoOrientation:[[UIDevice currentDevice] orientation]];
 }
 
 #pragma mark - Private stuff
